@@ -1,0 +1,126 @@
+@startuml
+
+
+class RestServerAgent{
+	//addr : string//
+	//Game_Agents : map[string]*GameAgent//
+	//Create_Player_Channel : chan *GameAgent//
+}
+
+class GameAgent implements RestServerAgent{
+	ID : string
+	Hp : int
+	Money : int
+	Result : string
+	Current_Wave : int
+	Monster_server : *monster.Monster_Server
+	Tower_server : *tower.Tower_Server
+	Map : *_map.Map
+}
+
+
+
+
+Monster_Server --> GameAgent
+Tower_Server --> GameAgent
+
+
+
+
+
+
+
+interface Monster_Factory_Interface{
+	Create_Monster(typ string) Monster_Interface
+}
+class Monster_Server implements Monster_Interface{
+    Monsters : map[string]Monster_Interface
+	Send_Out_Monster : chan Request_New_Monster_With_Road
+	Blood_Channel : chan int
+	Money_Channel : chan int
+	Treat_Monster_Channel : chan string
+}
+
+Monster_Interface <-- Monster_Factory_Interface
+
+interface Monster_Interface{
+	Set_Position(_map.Position)             // Change monster's position for moving monsters
+	Set_Position_Message() Position_Message // Encapsulated location information for tower_attack_monster
+	Get_Attack(tower.Attack) bool           // Handling of monsters after receiving an attack
+	Move(*Monster_Server)                   // monster moves along the Astar path
+	Reach_Destination() bool
+	Get_Hp() int
+	Get_Move_Speed() int
+	Get_Value() int
+	Get_Monster_Type() string
+}
+
+class Normal extends Monster_Server{
+}
+
+class High_Hp extends Monster_Server{
+}
+
+class High_Speed extends Monster_Server{
+}
+
+
+
+interface Tower_Factory_Interface{
+	Create(typ string, x int, y int) Tower_Interface
+	Create_tower(typ string, x int, y int) Tower_Interface
+	Register_tower(tower Tower_Interface)
+	Destory_tower(Tower interface{}) int
+}
+
+Tower_Interface <-- Tower_Factory_Interface
+
+class Tower_Server implements Tower_Interface{
+	NumberTower : int
+	TowerList : map[int]Tower_Interface
+	Create_Tower_Request : chan types.Request_New_Tower
+	Delete_Tower_Request : chan types.Request_Delete_Tower
+	Level_Up_Tower_Request : chan types.Request_Level_Up_Tower
+	Money_Channel : chan int
+}
+
+interface Tower_Interface{
+	GetId() int
+	Get_Position() _map.Position
+	Get_Attack_Info() Attack
+	Free() int
+	Level_up()
+}
+
+class Average extends Tower_Server{
+}
+class Slow_Down extends Tower_Server{
+}
+class High_Damage extends Tower_Server{
+}
+class High_Attack_Speed extends Tower_Server{
+}
+class Long_Attack_Distance extends Tower_Server{
+}
+
+
+
+Monster_Server --> Monster_Agent
+Tower_Server --> Tower_Agent
+
+
+class Monster_Agent{
+	Attack_Channel : chan tower.Attack // egale l‘attribut c dans Request
+	Request_Channel : chan Request      //channel de Request
+	PositionMessage : monster.Position_Message
+}
+
+class Tower_Agent{
+	Request_Channel : chan Request
+	Position : _map.Position // position of tower
+	Attack : tower.Attack  // info of attack of tower
+}
+
+
+
+@enduml

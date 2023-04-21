@@ -1,0 +1,76 @@
+@startuml request
+title Front-end and back-end interaction
+
+==new_player==
+FrontEnd -> BackEnd: Request: new_player
+note left
+//Player Name : ID//
+//Selected map number : Map_ID//
+end note
+activate BackEnd
+BackEnd -> BackEnd : Creat a new player
+activate BackEnd
+BackEnd -> BackEnd : Creat a new Monster Server
+activate BackEnd
+BackEnd -> BackEnd : Creat a new Tower Server
+
+==new_monster_wave==
+FrontEnd -> BackEnd: Request: new_monster_wave
+note left
+//Player Name : ID//
+//Monster Waves number : Wave//
+end note
+activate BackEnd
+BackEnd -> BackEnd : Create a new wave of monsters\n in increasing numbers
+return
+note left
+//Monster No. : Monster_Normal//
+//Monster No. : Monster_High_Hp//
+//Monster No. : Monster_High_Speed//
+//Monster Action Paths : Road//
+end note
+
+==new_tower==
+FrontEnd -> BackEnd: Request: new_tower -> Deduct player money
+note left
+//Player Name : ID//
+//Tower ID  : Tower_ID//
+//Tower Type  : Type//
+//Tower Postition : X//
+//Tower Postition : Y//
+end note
+activate BackEnd
+BackEnd -> BackEnd : Create a new tower
+
+==level_up_tower==
+FrontEnd -> BackEnd: Request: level_up_tower -> Deduct player money
+note left
+//Player Name : ID//
+//Tower ID  : Tower_ID//
+end note
+activate BackEnd
+BackEnd -> BackEnd : Upgrade Tower
+return
+
+==delete_tower==
+FrontEnd -> BackEnd: Request: delete_tower
+note left
+//Player Name : ID//
+//Tower ID  : Tower_ID//
+end note
+activate BackEnd
+BackEnd -> BackEnd : delete tower
+return Return half of the money back to the player
+return Remove tower
+
+==monster_situation==
+BackEnd -> FrontEnd: Response_Monster_Situation
+note left
+//Monster ID. : ID//
+//Monster_Situation : Situation//
+end note
+
+==输赢？==
+
+
+@enduml

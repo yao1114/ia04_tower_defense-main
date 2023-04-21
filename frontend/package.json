@@ -1,0 +1,22 @@
+{
+  "name": "tower_defense",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.2.0",
+    "fabric": "^5.2.4",
+    "paper": "^0.12.17",
+    "vue": "^3.2.41",
+    "vue-fabric": "^0.1.42",
+    "vue-paper": "^0.0.1"
+  },
+  "devDependencies": {
+    "@types/fabric": "^4.5.13",
+    "@vitejs/plugin-vue": "^3.1.2",
+    "vite": "^3.1.8"
+  }
+}
